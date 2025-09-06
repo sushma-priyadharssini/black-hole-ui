@@ -1,0 +1,34 @@
+.boardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 50px;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.boardRow {
+  display: flex;
+  justify-content: center;
+}
+
+.boardCell {
+  width: 50px;
+  height: 50px;
+  margin: 10px;
+  background-color: rgb(144, 144, 214);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.boardCell:hover {
+  background-color: rgb(38, 38, 199);
+  cursor: pointer;
+}
