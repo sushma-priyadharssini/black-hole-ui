@@ -1,8 +1,8 @@
-import { createContext, useReducer, useContext } from "react";
+import { createContext, useReducer, useContext, useMemo } from "react";
 import { rootReducer, initialState } from "./reducers";
-import { setCanStartGame, setShowBoard } from "./actions/app";
+import { setCanStartGame, setShowBoard, setScoreMessage, setBoard } from "./actions/app";
 import { setPlayerName, setPlayerType, setPlayerTurn } from "./actions/player";
-import { setRoomId, setFirstPlayerCount, setSecondPlayerCount } from "./actions/game";
+import { setRoomId, setFirstPlayerCount, setSecondPlayerCount, setScore, setWinner } from "./actions/game";
 
 const AppContext = createContext(null)
 export const useAppContext = () => useContext(AppContext);
@@ -10,16 +10,20 @@ export const useAppContext = () => useContext(AppContext);
 export const AppContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(rootReducer, initialState);
 
-    const dispatchers = {
+    const dispatchers = useMemo(() => ({
         setShowBoard: setShowBoard(dispatch),
         setCanStartGame: setCanStartGame(dispatch),
+        setScoreMessage: setScoreMessage(dispatch),
+        setBoard: setBoard(dispatch),
         setPlayerName: setPlayerName(dispatch),
         setPlayerType: setPlayerType(dispatch),
         setPlayerTurn: setPlayerTurn(dispatch),
         setRoomId: setRoomId(dispatch),
         setFirstPlayerCount: setFirstPlayerCount(dispatch),
         setSecondPlayerCount: setSecondPlayerCount(dispatch),
-    }
+        setScore: setScore(dispatch),
+        setWinner: setWinner(dispatch)
+    }), [])
 
     return (
         <AppContext.Provider value={{

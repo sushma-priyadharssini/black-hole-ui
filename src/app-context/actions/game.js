@@ -15,3 +15,15 @@ export const setSecondPlayerCount = (dispatch) => (payload) =>
         type: "SET_SECOND_PLAYER_COUNT",
         payload,
     });
+
+export const setWinner = (dispatch) => (payload) =>
+    dispatch({
+        type: "SET_WINNER",
+        payload,
+    });
+
+export const setScore = (dispatch) => (payload) =>
+    dispatch({
+        type: "SET_SCORE",
+        payload,
+    });

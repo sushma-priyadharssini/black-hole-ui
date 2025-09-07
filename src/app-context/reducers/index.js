@@ -5,17 +5,21 @@ import { game } from "./game";
 export const initialState = {
     app: {
         showBoard: false,
-        canStartGame: false
+        canStartGame: false,
+        scoreMessage: '',
+        board: null
     },
     player: {
-        name: "",
-        type: "P1",
-        currentTurn: true
+        playerName: "",
+        playerType: "P1",
+        playerTurn: true
     },
     game: {
         roomId: null,
         firstPlayerCount: 1,
-        secondPlayerCount: 1
+        secondPlayerCount: 1,
+        score: 0,
+        winner: null,
     }
 };
 

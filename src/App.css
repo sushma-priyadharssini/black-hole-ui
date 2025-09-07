@@ -1,4 +1,13 @@
 .App {
-  text-align: center;
-  height: 100%;
+  height: calc(100% - 48px);
+  width: calc(100% - 48px);
+  padding: 24px;
+}
+
+@media (min-width: 640px) {
+  .App {
+    height: calc(100% - 64px);
+    width: calc(100% - 64px);
+    padding: 32px;
+  }
 }

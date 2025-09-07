@@ -15,6 +15,16 @@ export const game = (state, action) => {
                 ...state,
                 secondPlayerCount: action.payload
             };
+        case 'SET_WINNER':
+            return {
+                ...state,
+                winner: action.payload
+            };
+        case 'SET_SCORE':
+            return {
+                ...state,
+                score: action.payload
+            };
         default:
             return state;
     }

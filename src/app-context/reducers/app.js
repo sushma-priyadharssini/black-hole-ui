@@ -10,6 +10,16 @@ export const app = (state, action) => {
                 ...state,
                 canStartGame: action.payload
             };
+        case 'SET_SCORE_MESSAGE':
+            return {
+                ...state,
+                scoreMessage: action.payload
+            };
+        case 'SET_BOARD':
+            return {
+                ...state,
+                board: action.payload
+            };
         default:
             return state;
     }
