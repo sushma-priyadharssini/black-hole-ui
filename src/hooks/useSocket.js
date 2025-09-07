@@ -41,11 +41,13 @@ const useSocket = () => {
     const checkWinner = useCallback(() => {
         let blackHoleTile = findBlackHole(board);
         console.log("blackHoleTile", blackHoleTile)
-        setBoardState(blackHoleTile, { text: "??", status: STATUS.BLACK_HOLE })
-        let neighbours = getNeighbours(blackHoleTile);
-        const gameResults = calculateScore(board, neighbours)
-        setScore(gameResults.score);
-        setWinner(gameResults.winner)
+        if (blackHoleTile) {
+            setBoardState(blackHoleTile, { text: "??", status: STATUS.BLACK_HOLE })
+            let neighbours = getNeighbours(blackHoleTile);
+            const gameResults = calculateScore(board, neighbours)
+            setScore(gameResults.score);
+            setWinner(gameResults.winner)
+        }
     }, [board, setBoardState, setScore, setWinner])
 
 
