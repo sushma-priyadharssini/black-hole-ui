@@ -74,6 +74,10 @@ const useSocket = () => {
         setScoreMessage(scoreMessage);
     }, [playerType, setScoreMessage])
 
+    const resetBoard = useCallback(() => {
+        setBoardState(initializeBoard())
+    }, [setBoardState])
+
 
     useEffect(() => {
         if (winner && winner === playerType && blackHole) {
@@ -133,7 +137,7 @@ const useSocket = () => {
 
         //reset Game board for the opponent.
         socket.on('resetGameBoard', () => {
-            // game.resetGame();
+            resetBoard()
             setPlayerTurn(false);
         });
 
@@ -165,10 +169,11 @@ const useSocket = () => {
         setPlayerTurn,
         setRoomId,
         setShowBoard,
-        updateBoard
+        updateBoard,
+        resetBoard
     ]);
 
-    return { board, message, updateBoard };
+    return { board, message, updateBoard, resetBoard };
 }
 
 export default useSocket;

@@ -6,7 +6,7 @@ import useSocket from "../../hooks/useSocket";
 
 
 const Game = () => {
-    const { board, message, updateBoard } = useSocket();
+    const { board, message, updateBoard, resetBoard } = useSocket();
     const { app: { showBoard, scoreMessage } } = useAppContext();
 
     return <div className={styles.gameContainer}>
@@ -14,6 +14,7 @@ const Game = () => {
         {showBoard && <Board
             board={board}
             updateBoard={updateBoard}
+            resetBoard={resetBoard}
             message={message} />}
         {scoreMessage && <div className={styles.scoreMessage}>{scoreMessage}</div>}
     </div>

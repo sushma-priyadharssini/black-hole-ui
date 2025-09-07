@@ -3,7 +3,7 @@ import { useAppContext } from "../../app-context";
 import socket from "../../helpers/socket";
 import { STATUS, STATUS_COLOR } from "../../helpers/constants"
 
-const Board = ({ message, updateBoard, board }) => {
+const Board = ({ message, updateBoard, board, resetBoard }) => {
     const {
         app: { canStartGame },
         game: { roomId },
@@ -12,7 +12,7 @@ const Board = ({ message, updateBoard, board }) => {
 
     const resetGame = () => {
         socket.emit('resetGame', { room: roomId });
-        //   game.resetGame(); TODO: RESET logic
+        resetBoard();
         setPlayerTurn(true);
     }
 
