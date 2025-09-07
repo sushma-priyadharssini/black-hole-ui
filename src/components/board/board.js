@@ -1,11 +1,12 @@
 import styles from './board.module.css';
 import { useAppContext } from "../../app-context";
 import socket from "../../helpers/socket";
+import { STATUS, STATUS_COLOR } from "../../helpers/constants"
 
-const Board = ({ message, updateBoard, displayScore }) => {
+const Board = ({ message, updateBoard, board }) => {
     const {
-        app: { canStartGame, board },
-        game: { roomId, winner, score },
+        app: { canStartGame },
+        game: { roomId },
         player: { playerType, playerTurn },
         dispatchers: { setPlayerTurn } } = useAppContext();
 
@@ -19,7 +20,7 @@ const Board = ({ message, updateBoard, displayScore }) => {
         socket.emit('playTurn', { tile, room });
     };
 
-    const markClicked = (text, tile) => {
+    const markClicked = (status, tile) => {
         if (!canStartGame) {
             alert('Wait for the Opponent to Join');
             return;
@@ -27,14 +28,12 @@ const Board = ({ message, updateBoard, displayScore }) => {
         if (!playerTurn) {
             alert('Its not your turn!');
             return;
-        } else if (text === '?') {
+        } else if (status === STATUS.DEFAULT) {
             playTurn(tile, roomId);
             updateBoard(playerType, tile);
-            if (winner) {
-                socket.emit('declareWinner', { room: roomId, winner: winner, score: score });
-                displayScore(winner, score);
-            }
             setPlayerTurn(false);
+        } else {
+            alert('Already played!');
         }
     }
 
@@ -44,13 +43,13 @@ const Board = ({ message, updateBoard, displayScore }) => {
             {board?.map((row, rowIndex) => (
                 <div key={rowIndex} className={styles.boardRow}>
                     {row.map((block, colIndex) => {
-                        const { text, color } = block;
+                        const { text, status } = block;
                         return (
                             <div
                                 key={colIndex}
-                                onClick={() => markClicked(text, [rowIndex, colIndex])}
+                                onClick={() => markClicked(status, [rowIndex, colIndex])}
                                 className={`${styles.boardCell}`}
-                                style={{ backgroundColor: color }}
+                                style={{ backgroundColor: STATUS_COLOR[status] }}
                             >
                                 {text}
                             </div>

@@ -1,6 +1,6 @@
 import { createContext, useReducer, useContext, useMemo } from "react";
 import { rootReducer, initialState } from "./reducers";
-import { setCanStartGame, setShowBoard, setScoreMessage, setBoard } from "./actions/app";
+import { setCanStartGame, setShowBoard, setScoreMessage } from "./actions/app";
 import { setPlayerName, setPlayerType, setPlayerTurn } from "./actions/player";
 import { setRoomId, setFirstPlayerCount, setSecondPlayerCount, setScore, setWinner } from "./actions/game";
 
@@ -14,7 +14,6 @@ export const AppContextProvider = ({ children }) => {
         setShowBoard: setShowBoard(dispatch),
         setCanStartGame: setCanStartGame(dispatch),
         setScoreMessage: setScoreMessage(dispatch),
-        setBoard: setBoard(dispatch),
         setPlayerName: setPlayerName(dispatch),
         setPlayerType: setPlayerType(dispatch),
         setPlayerTurn: setPlayerTurn(dispatch),

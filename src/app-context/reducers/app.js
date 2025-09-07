@@ -15,11 +15,6 @@ export const app = (state, action) => {
                 ...state,
                 scoreMessage: action.payload
             };
-        case 'SET_BOARD':
-            return {
-                ...state,
-                board: action.payload
-            };
         default:
             return state;
     }

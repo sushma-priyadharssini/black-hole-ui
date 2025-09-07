@@ -2,60 +2,69 @@
 import { useEffect, useState, useCallback } from "react";
 import { useAppContext } from "../app-context";
 import socket from "../helpers/socket";
-import { getScoreBoardMessage, initializeBoard, findBlackHole } from "../helpers/utils";
+import { getScoreBoardMessage, initializeBoard, findBlackHole, getNeighbours, calculateScore } from "../helpers/utils";
+import { STATUS } from "../helpers/constants"
 
 const useSocket = () => {
     const {
         player: { playerName, playerType },
-        game: { firstPlayerCount, secondPlayerCount },
-        app: { board },
+        game: { firstPlayerCount, secondPlayerCount, score, winner, roomId },
         dispatchers: {
             setShowBoard,
             setPlayerTurn,
             setCanStartGame,
             setRoomId,
             setScoreMessage,
-            setBoard,
             setFirstPlayerCount,
-            setSecondPlayerCount
+            setSecondPlayerCount,
+            setScore,
+            setWinner
         } } = useAppContext();
     const [message, setMessage] = useState('');
+    const [board, setBoard] = useState(initializeBoard());
 
 
     // update context state of the board
     const setBoardState = useCallback((tile, updatedBlock) => {
-        const updatedBoard = board.map((row, r) =>
-            r === tile[0]
-                ? row.map((block, c) => (c === tile[1] ? updatedBlock : block))
-                : row
-        )
-        setBoard(updatedBoard);
-    }, [board, setBoard])
+        setBoard((prev) => {
+            console.log("Prev board:", prev);
+            return prev.map((row, r) =>
+                r === tile[0]
+                    ? row.map((block, c) => c === tile[1] ? updatedBlock : block)
+                    : row
+            )
+        });
+    }, [setBoard])
+
 
     // calculate scores and decide the winner
-    const getWinner = useCallback(() => {
+    const checkWinner = useCallback(() => {
         let blackHoleTile = findBlackHole(board);
-        setBoardState(blackHoleTile, { text: "??", color: "black" })
-        // var neighbours = this.getNeighbours(blackHole);
-        // this.getScore(neighbours);
-    }, [board, setBoardState])
+        console.log("blackHoleTile", blackHoleTile)
+        setBoardState(blackHoleTile, { text: "??", status: STATUS.BLACK_HOLE })
+        let neighbours = getNeighbours(blackHoleTile);
+        const gameResults = calculateScore(board, neighbours)
+        setScore(gameResults.score);
+        setWinner(gameResults.winner)
+    }, [board, setBoardState, setScore, setWinner])
+
 
     // update the board for the given tile
     const updateBoard = useCallback((playerType, tile) => {
         if (firstPlayerCount === 11 && secondPlayerCount === 11) {
             return;
         }
+
         if (playerType === 'P1') {
-            setBoardState(tile, { text: firstPlayerCount, color: '#9090D6' })
+            setBoardState(tile, { text: firstPlayerCount + 1, status: STATUS.P1 })
             setFirstPlayerCount(firstPlayerCount + 1);
         } else {
-            setBoardState(tile, { text: secondPlayerCount, color: '#F43F5E' })
+            setBoardState(tile, { text: secondPlayerCount + 1, status: STATUS.P2 })
             setSecondPlayerCount(secondPlayerCount + 1);
         }
-        if (firstPlayerCount + 1 > 10 && secondPlayerCount + 1 > 10) {
-            getWinner();
-        }
-    }, [firstPlayerCount, secondPlayerCount, setBoardState, getWinner, setFirstPlayerCount, setSecondPlayerCount])
+
+    }, [firstPlayerCount, secondPlayerCount, setBoardState, checkWinner, setFirstPlayerCount, setSecondPlayerCount])
+
 
     // display the score in the UI
     const displayScore = useCallback((winner, score) => {
@@ -64,15 +73,27 @@ const useSocket = () => {
     }, [playerType, setScoreMessage])
 
 
+    useEffect(() => {
+        if (winner && winner === playerType) {
+            socket.emit('declareWinner', { room: roomId, winner: winner, score: score });
+            displayScore(winner, score);
+        }
+    }, [winner, score, displayScore, roomId, playerType])
+
+    useEffect(() => {
+        if (playerType === "P2" && firstPlayerCount === 10 && secondPlayerCount === 10) {
+            checkWinner();
+        }
+    }, [firstPlayerCount, secondPlayerCount, playerType])
+
+
 
     // SOCKET LISTENERS
-
     useEffect(() => {
         // New Game created by current client. Update the UI and create new Game var.
         socket.on('newGame', (data) => {
             const message = `Hello, ${data.name}. Please ask your friend to enter Game ID: ${data.room}. Waiting for player 2...`;
             setRoomId(data.room); // Create game for player 1
-            setBoard(initializeBoard());
             setShowBoard(true);
             setMessage(message);
         });
@@ -92,7 +113,6 @@ const useSocket = () => {
             setMessage(message);
             setPlayerTurn(false);
             setCanStartGame(true);
-            setBoard(initializeBoard());
             setShowBoard(true);
         });
 
@@ -144,7 +164,7 @@ const useSocket = () => {
         updateBoard
     ]);
 
-    return { message, updateBoard, displayScore };
+    return { board, message, updateBoard };
 }
 
 export default useSocket;

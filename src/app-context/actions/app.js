@@ -15,9 +15,3 @@ export const setScoreMessage = (dispatch) => (payload) =>
         type: "SET_SCORE_MESSAGE",
         payload,
     });
-
-export const setBoard = (dispatch) => (payload) =>
-    dispatch({
-        type: "SET_BOARD",
-        payload,
-    });

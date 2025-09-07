@@ -1,4 +1,4 @@
-const PYRAMID_BASE_COUNT = 6; // Base row has 6 squares
+import { PYRAMID_BASE_COUNT, STATUS } from "./constants"
 
 export const getWinner = (firstCount, secondCount) => {
     let score, winner;
@@ -28,14 +28,55 @@ export const getScoreBoardMessage = (playerType, winner, score) => {
 
 export const initializeBoard = () => {
     return Array.from({ length: PYRAMID_BASE_COUNT }, (_, rowIndex) =>
-        Array.from({ length: PYRAMID_BASE_COUNT - rowIndex }, () => ({ text: '?', color: "#959ba5" }))
+        Array.from({ length: PYRAMID_BASE_COUNT - rowIndex }, () => ({ text: '?', status: STATUS.DEFAULT }))
     ).reverse();
 }
 
 export const findBlackHole = (board) => {
     return board.reduce((found, row, rowIndex) => {
         if (found) return found; // already found
-        const colIndex = row.findIndex(val => val === '?');
+        const colIndex = row.findIndex(block => block.status === STATUS.DEFAULT);
         return colIndex !== -1 ? [rowIndex, colIndex] : null;
     }, null);
+}
+
+export const getNeighbours = ([row, column]) => {
+    let neighbours = [];
+    if ((row - 1) >= 0) {
+        neighbours.push([row - 1, column]);
+    }
+    if ((column - 1) >= 0) {
+        neighbours.push([row, column - 1]);
+    }
+    if ((row - 1) >= 0 && (column - 1) >= 0) {
+        neighbours.push([row - 1, column - 1]);
+    }
+    if ((row + 1) <= 5) {
+        neighbours.push([row + 1, column]);
+    }
+    if ((column + 1) <= 5) {
+        neighbours.push([row, column + 1]);
+    }
+    if ((row + 1) <= 5 && (column + 1) <= 5) {
+        neighbours.push([row + 1, column + 1]);
+    }
+    return neighbours;
+}
+
+export const calculateScore = (board, neighbours) => {
+    let firstCount = 0,
+        secondCount = 0;
+
+    neighbours.forEach(([row, col]) => {
+        const { text, status } = board[row][col];
+        if (status !== STATUS.DEFAULT) {
+            if (status === STATUS.P1) {
+                firstCount = firstCount + text;
+            } else {
+                secondCount = secondCount + text;
+            }
+        }
+    });
+
+    return getWinner(firstCount, secondCount);
 }

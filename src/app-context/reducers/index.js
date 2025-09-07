@@ -6,8 +6,7 @@ export const initialState = {
     app: {
         showBoard: false,
         canStartGame: false,
-        scoreMessage: '',
-        board: null
+        scoreMessage: ''
     },
     player: {
         playerName: "",
@@ -16,8 +15,8 @@ export const initialState = {
     },
     game: {
         roomId: null,
-        firstPlayerCount: 1,
-        secondPlayerCount: 1,
+        firstPlayerCount: 0,
+        secondPlayerCount: 0,
         score: 0,
         winner: null,
     }
