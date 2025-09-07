@@ -76,7 +76,9 @@ const useSocket = () => {
 
     const resetBoard = useCallback(() => {
         setBoardState(initializeBoard())
-    }, [setBoardState])
+        setFirstPlayerCount(0)
+        setSecondPlayerCount(0)
+    }, [setBoardState, setFirstPlayerCount, setSecondPlayerCount])
 
 
     useEffect(() => {
@@ -137,7 +139,7 @@ const useSocket = () => {
 
         //reset Game board for the opponent.
         socket.on('resetGameBoard', () => {
-            resetBoard()
+            resetBoard();
             setPlayerTurn(false);
         });
 
