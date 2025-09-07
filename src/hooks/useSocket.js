@@ -53,7 +53,7 @@ const useSocket = () => {
 
     // update the board for the given tile
     const updateBoard = useCallback((playerType, tile) => {
-        if (firstPlayerCount === 11 && secondPlayerCount === 11) {
+        if (firstPlayerCount === 10 && secondPlayerCount === 10) {
             return;
         }
 
