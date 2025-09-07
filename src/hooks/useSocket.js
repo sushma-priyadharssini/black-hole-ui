@@ -63,7 +63,7 @@ const useSocket = () => {
             setSecondPlayerCount(secondPlayerCount + 1);
         }
 
-    }, [firstPlayerCount, secondPlayerCount, setBoardState, checkWinner, setFirstPlayerCount, setSecondPlayerCount])
+    }, [firstPlayerCount, secondPlayerCount, setBoardState, setFirstPlayerCount, setSecondPlayerCount])
 
 
     // display the score in the UI
@@ -84,7 +84,7 @@ const useSocket = () => {
         if (playerType === "P2" && firstPlayerCount === 10 && secondPlayerCount === 10) {
             checkWinner();
         }
-    }, [firstPlayerCount, secondPlayerCount, playerType])
+    }, [firstPlayerCount, secondPlayerCount, playerType, checkWinner])
 
 
 
