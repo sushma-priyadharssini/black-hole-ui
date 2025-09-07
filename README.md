@@ -38,7 +38,7 @@ cd black-hole-ui
 npm install
 
 # Start development server
-npm run dev
+npm start
 ```
 
 ## 🎯 Rules of the Game
