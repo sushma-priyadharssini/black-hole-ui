@@ -29,10 +29,10 @@ Deployment: Vercel
 Clone and run locally:
 ```
 # Clone repository
-git clone https://github.com/your-username/black-hole.git
+git clone https://github.com/sushma-priyadharssini/black-hole-ui.git
 
 # Navigate to folder
-cd black-hole
+cd black-hole-ui
 
 # Install dependencies
 npm install
