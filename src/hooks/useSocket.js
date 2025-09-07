@@ -160,6 +160,7 @@ const useSocket = () => {
         board,
         displayScore,
         setBoard,
+        setBoardState,
         setCanStartGame,
         setPlayerTurn,
         setRoomId,
