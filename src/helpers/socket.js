@@ -2,7 +2,7 @@
 import { io } from "socket.io-client";
 
 // Create only ONE instance
-const socket = io("http://localhost:4000", {
+const socket = io("https://black-hole-server-7lzu.onrender.com", {
     autoConnect: true,  // auto connect on load
 });
 
